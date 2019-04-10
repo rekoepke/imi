@@ -132,12 +132,12 @@ public class RasterImage {
 			//Fallunterscheidung
 			switch(binary) {
 			case 0: clamp(rn = r + strength);
-					clamp(gn = g + strength);
-					clamp(bn = b + strength);
+				clamp(gn = g + strength);
+				clamp(bn = b + strength);
 			break;
 			case 1: clamp(rn = r - strength);
-					clamp(gn = g - strength);
-					clamp(bn = b - strength);
+				clamp(gn = g - strength);
+				clamp(bn = b - strength);
 			break;
 			}
 			*/
