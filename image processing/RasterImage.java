@@ -122,25 +122,12 @@ public class RasterImage {
 			
 			//Fallunterscheidung
 			switch(binary) {
-			case 0: clamp(rn = gn = bn = q + strength);
+			case 0: rn = gn = bn = clamp(q + strength);
 			break;
-			case 1: clamp(rn = gn = bn = q - strength);
+			case 1: rn = gn = bn = clamp(q - strength);
 			break;
 			}
 			
-			/*
-			//Fallunterscheidung
-			switch(binary) {
-			case 0: clamp(rn = r + strength);
-				clamp(gn = g + strength);
-				clamp(bn = b + strength);
-			break;
-			case 1: clamp(rn = r - strength);
-				clamp(gn = g - strength);
-				clamp(bn = b - strength);
-			break;
-			}
-			*/
 			argb[randomNum] = (0xFF<<24) | (rn<<16) | (gn<<8) | bn;
 		}
 	}	
