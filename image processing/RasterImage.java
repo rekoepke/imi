@@ -99,31 +99,57 @@ public class RasterImage {
 	 */
 	public void addNoise(double quantity, int strength) {
 		// TODO: add noise with the given quantity and strength
-		int rn, gn, bn;
-		
-		for(int pos = 0; pos < argb.length; pos++) {
-			int value = argb[pos];
-			
-			int r = (value >> 16) & 0xff;
-			int g = (value >>  8) & 0xff;
-			int b =  value        & 0xff;
-			
+		int rn = 255; 
+		int gn = 0; 
+		int bn = 0;
+
+		for(int i = 0; i < argb.length*quantity; i++) {
 			Random rand = new Random();
 			int randomNum = rand.nextInt(argb.length);
-				
+
 			int curr = argb[randomNum];
-					
-				if(curr < 128) {
-					rn = 0;
-					gn = 0;
-					bn = 0;
-				}
-				else {
-					rn = 255;
-					gn = 255;
-					bn = 255;
-				}
-				argb[pos] = (0xFF<<24) | (rn<<16) | (gn<<8) | bn;
+
+			//Farbwerte in Variablen speichern
+			int r = (curr >> 16) & 0xff;
+			int g = (curr >>  8) & 0xff;
+			int b =  curr        & 0xff;
+			
+			int q = (r+g+b)/3;
+
+			//Zufall, ob heller oder dunkler
+			Random random = new Random();
+			int binary = random.nextInt(2);
+			
+			//Fallunterscheidung
+			switch(binary) {
+			case 0: clamp(rn = gn = bn = q + strength);
+			break;
+			case 1: clamp(rn = gn = bn = q + strength);
+			break;
 			}
-		}		
+			
+			/*
+			//Fallunterscheidung
+			switch(binary) {
+			case 0: clamp(rn = r + strength);
+					clamp(gn = g + strength);
+					clamp(bn = b + strength);
+			break;
+			case 1: clamp(rn = r - strength);
+					clamp(gn = g - strength);
+					clamp(bn = b - strength);
+			break;
+			}
+			*/
+			argb[randomNum] = (0xFF<<24) | (rn<<16) | (gn<<8) | bn;
+		}
+	}	
+	
+	private int clamp(int val) {
+		
+		if(val<=0)		val = 0;
+		if(val>=255) 	val = 255;
+		
+		return val;
 	}
+}
