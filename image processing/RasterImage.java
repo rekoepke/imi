@@ -99,35 +99,42 @@ public class RasterImage {
 	 */
 	public void addNoise(double quantity, int strength) {
 		// TODO: add noise with the given quantity and strength
-		int rn = 255; 
+		int rn = 0; 
 		int gn = 0; 
 		int bn = 0;
-
+		
+		//Um 0-60% der gesamten Anzahl der Pixel zu erhalten teilt man die Gesamtanzahl der Pixel(argb.length) durch 
+		//den quantity Faktor(ist nen double zwischen 0.0-0.6) Somit läuft die for-Schleife von 0 bis maximal 
+		//argb.length*0.6(also über 60% aller Pixel im Array) und würfelt im folgenden so viele zufällige Positionen
 		for(int i = 0; i < argb.length*quantity; i++) {
 			Random rand = new Random();
 			int randomNum = rand.nextInt(argb.length);
-
+			
+			//man nimmt sich diesen Wert der an der gewürfelten Index-Position steht. Ist ein langer code der
+			//noch zusammenhängenden argb-Werte
 			int curr = argb[randomNum];
 
-			//Farbwerte in Variablen speichern
+			//curr shiften und Farbwerte in Variablen speichern
 			int r = (curr >> 16) & 0xff;
 			int g = (curr >>  8) & 0xff;
 			int b =  curr        & 0xff;
 			
+			//Graustufenbild erzeugen
 			int q = (r+g+b)/3;
 
-			//Zufall, ob heller oder dunkler
+			//Zufallsgenerator, ob heller oder dunkler
 			Random random = new Random();
 			int binary = random.nextInt(2);
 			
-			//Fallunterscheidung
+			//Fallunterscheidung und entweder den Helligkeitswert draufrechnen oder abziehen. Clamp wichtig,
+			//da es sonst zu nem Overflow kommt
 			switch(binary) {
 			case 0: rn = gn = bn = clamp(q + strength);
 			break;
 			case 1: rn = gn = bn = clamp(q - strength);
 			break;
 			}
-			
+			//Werte zurückschreiben
 			argb[randomNum] = (0xFF<<24) | (rn<<16) | (gn<<8) | bn;
 		}
 	}	
