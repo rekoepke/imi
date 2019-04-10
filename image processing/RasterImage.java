@@ -124,7 +124,7 @@ public class RasterImage {
 			switch(binary) {
 			case 0: clamp(rn = gn = bn = q + strength);
 			break;
-			case 1: clamp(rn = gn = bn = q + strength);
+			case 1: clamp(rn = gn = bn = q - strength);
 			break;
 			}
 			
